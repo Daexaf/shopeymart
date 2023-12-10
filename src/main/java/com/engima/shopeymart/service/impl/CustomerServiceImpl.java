@@ -37,20 +37,28 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse update(CustomerRequest customerRequest) {
-//        Customer customer = Customer.builder()
-//                .id(customerRequest.getId())
-//                .name(customerRequest.getName())
-//                .address(customerRequest.getAddress())
-//                .mobilePhone(customerRequest.getMobilePhone())
-//                .email(customerRequest.getEmail())
-//                .build();
-//        customerRepository.save(customer);
-//        return CustomerResponse.builder()
-//                .fullName(customer.getName())
-//                .phone(customer.getMobilePhone())
-//                .address(customer.getAddress())
-//                .build();
-        return null;
+        CustomerResponse getCustomer = getById(customerRequest.getId());
+
+        if (getCustomer != null){
+            Customer updateCustomer = customerRepository.findById(customerRequest.getId()).orElse(null);
+            if (updateCustomer != null){
+                updateCustomer.setName(customerRequest.getName());
+                updateCustomer.setAddress(customerRequest.getAddress());
+                updateCustomer.setEmail(customerRequest.getEmail());
+                updateCustomer.setMobilePhone(customerRequest.getMobilePhone());
+                customerRepository.save(updateCustomer);
+
+                return CustomerResponse.builder()
+                        .fullName(updateCustomer.getName())
+                        .address(updateCustomer.getAddress())
+                        .phone(updateCustomer.getMobilePhone())
+                        .build();
+            }else {
+                return null;
+            }
+        }else {
+            return null;
+        }
     }
 
     @Override
@@ -78,6 +86,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerResponse getById(String id) {
         Optional<Customer> customerOptional = customerRepository.findById(id);
         Customer customer = customerOptional.orElse(null);
+        assert customer != null;
         return CustomerResponse.builder()
                 .fullName(customer.getName())
                 .address(customer.getAddress())

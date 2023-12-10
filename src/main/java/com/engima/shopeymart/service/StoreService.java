@@ -21,12 +21,6 @@ public interface StoreService {
 
     void delete(String id);
 
-
-
-
-
-
-
-
+    StoreResponse update(StoreRequest storeRequest);
 
 }

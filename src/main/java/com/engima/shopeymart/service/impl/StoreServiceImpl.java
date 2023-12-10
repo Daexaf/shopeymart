@@ -18,7 +18,7 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
 
-//    @Override
+    //    @Override
 //    public Store create(Store store) {
 //        return storeRepository.save(store);
 //    }
@@ -67,16 +67,43 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public StoreResponse update(StoreRequest storeRequest) {
+        StoreResponse getStore = getById(storeRequest.getId());
+
+        if (getStore != null){
+            Store updateStore = storeRepository.findById(storeRequest.getId()).orElse(null);
+
+            if (updateStore != null){
+                updateStore.setName(storeRequest.getName());
+                updateStore.setNoSiup(storeRequest.getNoSiup());
+                updateStore.setAddress(storeRequest.getAddress());
+                updateStore.setMobilePhone(storeRequest.getMobilePhone());
+                storeRepository.save(updateStore);
+
+                return StoreResponse.builder()
+                        .noSiup(updateStore.getNoSiup())
+                        .storeName(updateStore.getName())
+                        .build();
+            }else {
+                return null;
+            }
+        }else {
+            return null;
+        }
+    }
+
+    @Override
     public StoreResponse getById(String id) {
         // Mengambil data dari repository menggunakan ID
         Optional<Store> storeOptional = storeRepository.findById(id);
         // Menangani kasus toko tidak ditemukan
         Store store = storeOptional.orElse(null);
         // Mengonversi objek Store menjadi objek StoreResponse
-         return StoreResponse.builder()
-            .storeName(store.getName())
-            .noSiup(store.getNoSiup())
-                 .build();
+        assert store != null;
+        return StoreResponse.builder()
+                .storeName(store.getName())
+                .noSiup(store.getNoSiup())
+                .build();
     }
 
     @Override
@@ -84,7 +111,7 @@ public class StoreServiceImpl implements StoreService {
         List<Store> stores = storeRepository.findAll();
         List<StoreResponse> storeResponses = new ArrayList<>();
 
-        for (Store store: stores){
+        for (Store store : stores) {
             StoreResponse sr = new StoreResponse().toBuilder()
                     .noSiup(store.getNoSiup())
                     .storeName(store.getName())

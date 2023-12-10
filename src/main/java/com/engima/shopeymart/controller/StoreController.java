@@ -71,4 +71,9 @@ public class StoreController {
     public void deleteCustomer(@PathVariable String id){
         storeService.delete(id);
     }
+
+    @PutMapping("/v1")
+    public StoreResponse update(@RequestBody StoreRequest storeRequest){
+        return storeService.update(storeRequest);
+    }
 }

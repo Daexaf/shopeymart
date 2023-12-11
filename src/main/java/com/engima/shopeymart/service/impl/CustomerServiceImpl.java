@@ -3,6 +3,7 @@ package com.engima.shopeymart.service.impl;
 import com.engima.shopeymart.dto.request.CustomerRequest;
 import com.engima.shopeymart.dto.response.CustomerResponse;
 import com.engima.shopeymart.entity.Customer;
+import com.engima.shopeymart.entity.Store;
 import com.engima.shopeymart.repository.CustomerRepository;
 import com.engima.shopeymart.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,11 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .email(customerRequest.getEmail())
                 .build();
         customerRepository.save(customer);
-        return CustomerResponse.builder()
-                .fullName(customer.getName())
-                .phone(customer.getMobilePhone())
-                .address(customer.getAddress())
-                .build();
+        return getCustomerResponse(customer);
     }
 
     @Override
@@ -48,11 +46,7 @@ public class CustomerServiceImpl implements CustomerService {
                 updateCustomer.setMobilePhone(customerRequest.getMobilePhone());
                 customerRepository.save(updateCustomer);
 
-                return CustomerResponse.builder()
-                        .fullName(updateCustomer.getName())
-                        .address(updateCustomer.getAddress())
-                        .phone(updateCustomer.getMobilePhone())
-                        .build();
+                return getCustomerResponse(updateCustomer);
             }else {
                 return null;
             }
@@ -69,28 +63,20 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<CustomerResponse> getAll() {
         List<Customer> customers = customerRepository.findAll();
-        List<CustomerResponse> customerResponses = new ArrayList<>();
-
-        for (Customer customer : customers){
-            CustomerResponse cr = new CustomerResponse().toBuilder()
-                    .fullName(customer.getName())
-                    .phone(customer.getMobilePhone())
-                    .address(customer.getAddress())
-                    .build();
-            customerResponses.add(cr);
-        }
-        return customerResponses;
+        return customers.stream().map(this::getCustomerResponse).collect(Collectors.toList());
     }
 
     @Override
     public CustomerResponse getById(String id) {
-        Optional<Customer> customerOptional = customerRepository.findById(id);
-        Customer customer = customerOptional.orElse(null);
-        assert customer != null;
+        Customer customers = customerRepository.findById(id).orElseThrow(()-> new RuntimeException("ID not found"));
+        return  getCustomerResponse(customers);
+    }
+
+    private CustomerResponse getCustomerResponse(Customer customer) {
         return CustomerResponse.builder()
                 .fullName(customer.getName())
-                .address(customer.getAddress())
                 .phone(customer.getMobilePhone())
+                .address(customer.getAddress())
                 .build();
     }
 }

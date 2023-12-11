@@ -57,10 +57,10 @@ public class StoreController {
         return storeService.create(storeRequest);
     }
 
-    @GetMapping("/v1/{id}")
-    public StoreResponse getIdStores(@PathVariable String id){
-        return storeService.getById(id);
-    }
+//    @GetMapping("/v1/{id}")
+//    public StoreResponse getIdStores(@PathVariable String id){
+//        return storeService.getById(id);
+//    }
 
     @GetMapping("/v1")
     public List<StoreResponse> getCustomer(){

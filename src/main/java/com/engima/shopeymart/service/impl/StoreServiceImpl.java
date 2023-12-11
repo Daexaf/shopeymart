@@ -18,16 +18,16 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
 
-    //    @Override
-//    public Store create(Store store) {
-//        return storeRepository.save(store);
-//    }
-//
-//    @Override
-//    public Store getById(String id) {
-//        return storeRepository.findById(id).orElse(null);//bisa pakai .get() atau .orElse(null);
-//    }
-//
+        @Override
+    public Store create(Store store) {
+        return storeRepository.save(store);
+    }
+
+    @Override
+    public Store getById(String id) {
+        return storeRepository.findById(id).orElse(null);//bisa pakai .get() atau .orElse(null);
+    }
+
     @Override
     public List<Store> getAllE() {
         return storeRepository.findAll();
@@ -68,9 +68,9 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public StoreResponse update(StoreRequest storeRequest) {
-        StoreResponse getStore = getById(storeRequest.getId());
+//        StoreResponse getStore = getById(storeRequest.getId());
 
-        if (getStore != null){
+        if (storeRequest.getAddress() != null){
             Store updateStore = storeRepository.findById(storeRequest.getId()).orElse(null);
 
             if (updateStore != null){
@@ -92,19 +92,17 @@ public class StoreServiceImpl implements StoreService {
         }
     }
 
-    @Override
-    public StoreResponse getById(String id) {
-        // Mengambil data dari repository menggunakan ID
-        Optional<Store> storeOptional = storeRepository.findById(id);
-        // Menangani kasus toko tidak ditemukan
-        Store store = storeOptional.orElse(null);
-        // Mengonversi objek Store menjadi objek StoreResponse
-        assert store != null;
-        return StoreResponse.builder()
-                .storeName(store.getName())
-                .noSiup(store.getNoSiup())
-                .build();
-    }
+//    @Override
+//    public StoreResponse getById(String id) {
+//        // Mengambil data dari repository menggunakan ID
+//        Store stores = storeRepository.findById(id).orElseThrow(()-> new RuntimeException("ID not found"));
+//        // Mengonversi objek Store menjadi objek StoreResponse
+//        return StoreResponse.builder()
+//                .id(stores.getId())
+//                .storeName(stores.getName())
+//                .noSiup(stores.getNoSiup())
+//                .build();
+//    }
 
     @Override
     public List<StoreResponse> getAll() {

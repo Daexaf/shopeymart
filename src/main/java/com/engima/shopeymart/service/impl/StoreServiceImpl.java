@@ -111,6 +111,7 @@ public class StoreServiceImpl implements StoreService {
 
         for (Store store : stores) {
             StoreResponse sr = new StoreResponse().toBuilder()
+                    .id(store.getId())
                     .noSiup(store.getNoSiup())
                     .storeName(store.getName())
                     .build();

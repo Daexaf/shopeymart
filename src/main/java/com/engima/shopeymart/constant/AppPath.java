@@ -5,5 +5,7 @@ public class AppPath {
 
     public final static String CUSTOMER = "/customer";
 
+    public final static String PRODUCT = "/product";
 
+    public final static String ORDER = "/order";
 }

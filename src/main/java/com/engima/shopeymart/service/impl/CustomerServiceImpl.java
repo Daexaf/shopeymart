@@ -68,12 +68,25 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse getById(String id) {
-        Customer customers = customerRepository.findById(id).orElseThrow(()-> new RuntimeException("ID not found"));
-        return  getCustomerResponse(customers);
+        Customer customer = customerRepository.findById(id).orElse(null);
+        if (customer != null) {
+            return CustomerResponse.builder()
+                    .id(customer.getId())
+                    .fullName(customer.getName())
+                    .address(customer.getAddress())
+                    .phone(customer.getMobilePhone())
+                    .build();
+        }
+        return null;
     }
+//    public CustomerResponse getById(String id) {
+//        Customer customers = customerRepository.findById(id).orElseThrow(()-> new RuntimeException("ID not found"));
+//        return  getCustomerResponse(customers);
+//    }
 
     private CustomerResponse getCustomerResponse(Customer customer) {
         return CustomerResponse.builder()
+                .id(customer.getId())
                 .fullName(customer.getName())
                 .phone(customer.getMobilePhone())
                 .address(customer.getAddress())

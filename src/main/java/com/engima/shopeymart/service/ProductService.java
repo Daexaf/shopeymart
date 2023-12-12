@@ -3,6 +3,7 @@ package com.engima.shopeymart.service;
 import com.engima.shopeymart.dto.request.ProductRequest;
 import com.engima.shopeymart.dto.response.ProductResponse;
 import com.engima.shopeymart.entity.Product;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -20,5 +21,7 @@ public interface ProductService {
     List<Product> getAll();
 
     void delete(String id);
+
+    Page<ProductResponse> getAllByNameOrPrice(String name, Long maxPrice, Integer page, Integer size);
 
 }

@@ -29,28 +29,36 @@ public class AuthServiceImpl implements AuthService {
     @Transactional(rollbackOn = Exception.class)
     @Override
     public RegisterResponse registerCustomer(AuthRequest request) {
-        try{
-            //todo 1: set credential
-            UserCredential userCredential = UserCredential.builder()
-                    .username(request.getUsername())
-                    .password(request.getPassword())
-                    .build();
-            userCredentialRepository.saveAndFlush(userCredential);
+        try {
             //todo 2: set role
             Role role = Role.builder()
                     .name(ERole.ROLE_CUSTOMER)
                     .build();
-            roleService.getOrSave(role);
+            Role roleSaved = roleService.getOrSave(role);
+            //todo 1: set credential
+            UserCredential userCredential = UserCredential.builder()
+                    .username(request.getUsername())
+                    .password(request.getPassword())
+                    .role(roleSaved)
+                    .build();
+            userCredentialRepository.saveAndFlush(userCredential);
+
             //todo 3: set customer
             Customer customer = Customer.builder()
                     .userCredential(userCredential)
+                    .name(request.getCustomerName())
+                    .address(request.getAddress())
+                    .mobilePhone(request.getMobilePhone())
+                    .email(request.getEmail())
                     .build();
             customerService.createNewCustomer(customer);
+
             return RegisterResponse.builder()
                     .username(userCredential.getUsername())
                     .role(userCredential.getRole().getName().toString())
                     .build();
-        }catch (DataIntegrityViolationException e){
+
+        } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exist");
         }
 

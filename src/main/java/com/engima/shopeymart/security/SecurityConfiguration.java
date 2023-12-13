@@ -11,7 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    private static final String[] WHITE_LIST_URL = {"/api/path/**"};
+    private static final String[] WHITE_LIST_URL = {"/api/auth/**"};
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
          http

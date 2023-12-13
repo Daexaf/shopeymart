@@ -148,7 +148,7 @@ public class ProductServiceImpl implements ProductService {
             //join digunakan untuk merelasikan antara product dan product price
             Join<Product, ProductPrice> productPrices = root.join("productPrices");
             //predicate digunakan untuk menggunakan LIKE dimana nanti kita akan menggunakan kondisi pencarian parameter
-            //disini akan mencari nama product atau harga yang sama atau harga dibawahnya, makanya menggunakan lesshanorequals
+            //disini akan mencari nama product atau harga yang sama atau harga dibawahnya, makanya menggunakan lessthanorequalto
             List<Predicate> predicates = new ArrayList<>();
             if (name != null) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
@@ -184,7 +184,6 @@ public class ProductServiceImpl implements ProductService {
                                 .build())
                         .build());
             }
-
             // digunakan untuk mencari harga yang aktif
         }
         return new PageImpl<>(productResponses, pageable, products.getTotalElements());

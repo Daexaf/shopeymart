@@ -20,6 +20,10 @@ public class Customer {
     private String mobilePhone;
     @Column(name = "email", unique = true, nullable = false, length = 30)
     private String email;
+
+    @OneToOne
+    @JoinColumn(name = "user_credential_id")
+    private UserCredential userCredential;
     //id
     //name
     //address

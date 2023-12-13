@@ -1,5 +1,6 @@
 package com.engima.shopeymart.controller;
 
+import com.engima.shopeymart.constant.AppPath;
 import com.engima.shopeymart.dto.request.ProductRequest;
 import com.engima.shopeymart.dto.response.CommonResponse;
 import com.engima.shopeymart.dto.response.PagingResponse;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/product")
+@RequestMapping(AppPath.PRODUCT)
 public class ProductController {
 
     private final ProductService productService;

@@ -9,5 +9,6 @@ public class AppPath {
 
     public final static String ORDER = "/api/auth/order";
 
-    public final static String REGISTER = "/api/auth/register";
+    public final static String AUTH = "/api/auth";
+
 }

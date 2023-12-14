@@ -2,6 +2,7 @@ package com.engima.shopeymart.controller;
 
 import com.engima.shopeymart.constant.AppPath;
 import com.engima.shopeymart.dto.request.AuthRequest;
+import com.engima.shopeymart.dto.response.LoginResponse;
 import com.engima.shopeymart.dto.response.RegisterResponse;
 import com.engima.shopeymart.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(AppPath.REGISTER)
+@RequestMapping(AppPath.AUTH)
 public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/v1")
+    @PostMapping("/register")
     public RegisterResponse registerCustomer(@RequestBody AuthRequest authRequest){
             return authService.registerCustomer(authRequest);
+    }
+
+    @PostMapping("/login")
+    public LoginResponse loginCustomer(@RequestBody AuthRequest authRequest){
+        return authService.login(authRequest);
     }
 }

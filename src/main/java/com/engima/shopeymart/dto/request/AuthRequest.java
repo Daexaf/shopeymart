@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class AuthRequest {
     private String username;
     private String password;
-    private String customerName;
+    private String name;
     private String address;
     private String mobilePhone;
     private String email;

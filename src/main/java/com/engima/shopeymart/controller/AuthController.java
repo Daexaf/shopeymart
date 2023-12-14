@@ -34,6 +34,12 @@ public class AuthController {
         return authService.login(authRequest);
     }
 
+    @PostMapping("/registerAdmin")
+    public RegisterResponse registerAdmin(@RequestBody AuthRequest authRequest){
+        return authService.registerAdmin(authRequest);
+    }
+
+
     //response entity digunakan untuk membuat return status code, message, dan kembalian datanya
 //    @PostMapping("/login")
 //    public ResponseEntity<?> loginCustomer(@RequestBody AuthRequest authRequest){

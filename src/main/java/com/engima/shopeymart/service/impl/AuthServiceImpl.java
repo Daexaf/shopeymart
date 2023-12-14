@@ -4,12 +4,10 @@ import com.engima.shopeymart.constant.ERole;
 import com.engima.shopeymart.dto.request.AuthRequest;
 import com.engima.shopeymart.dto.response.LoginResponse;
 import com.engima.shopeymart.dto.response.RegisterResponse;
-import com.engima.shopeymart.entity.AppUser;
-import com.engima.shopeymart.entity.Customer;
-import com.engima.shopeymart.entity.Role;
-import com.engima.shopeymart.entity.UserCredential;
+import com.engima.shopeymart.entity.*;
 import com.engima.shopeymart.repository.UserCredentialRepository;
 import com.engima.shopeymart.security.JwtUtil;
+import com.engima.shopeymart.service.AdminService;
 import com.engima.shopeymart.service.AuthService;
 import com.engima.shopeymart.service.CustomerService;
 import com.engima.shopeymart.service.RoleService;
@@ -37,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
     private final ValidationUtil validationUtil;
     private final AuthenticationManager authenticationManager;
+    private final AdminService adminService;
 
     @Transactional(rollbackOn = Exception.class)
     @Override
@@ -59,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
             //todo 3: set customer
             Customer customer = Customer.builder()
                     .userCredential(userCredential)
-                    .name(request.getCustomerName())
+                    .name(request.getName())
                     .address(request.getAddress())
                     .mobilePhone(request.getMobilePhone())
                     .email(request.getEmail())
@@ -93,5 +92,40 @@ public class AuthServiceImpl implements AuthService {
                 .token(token)
                 .role(appUser.getRole().name())
                 .build();
+    }
+
+    @Override
+    public RegisterResponse registerAdmin(AuthRequest request) {
+        try {
+            validationUtil.validate(request);
+            //todo 2: set role
+            Role role = Role.builder()
+                    .name(ERole.ROLE_ADMIN)
+                    .build();
+            Role roleSaved = roleService.getOrSave(role);
+            //todo 1: set credential
+            UserCredential userCredential = UserCredential.builder()
+                    .username(request.getUsername().toLowerCase())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .role(roleSaved)
+                    .build();
+            userCredentialRepository.saveAndFlush(userCredential);
+
+            //todo 3: set customer
+            Admin admin = Admin.builder()
+                    .userCredential(userCredential)
+                    .name(request.getName())
+                    .phoneNumber(request.getMobilePhone())
+                    .build();
+            adminService.createAdmins(admin);
+
+            return RegisterResponse.builder()
+                    .username(userCredential.getUsername())
+                    .role(userCredential.getRole().getName().toString())
+                    .build();
+
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exist");
+        }
     }
 }

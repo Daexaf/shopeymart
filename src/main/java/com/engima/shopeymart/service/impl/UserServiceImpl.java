@@ -2,7 +2,9 @@ package com.engima.shopeymart.service.impl;
 
 import com.engima.shopeymart.entity.AppUser;
 import com.engima.shopeymart.entity.UserCredential;
+import com.engima.shopeymart.repository.CustomerRepository;
 import com.engima.shopeymart.repository.UserCredentialRepository;
+import com.engima.shopeymart.service.CustomerService;
 import com.engima.shopeymart.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

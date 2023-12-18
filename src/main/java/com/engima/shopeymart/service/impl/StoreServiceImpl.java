@@ -18,7 +18,7 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
 
-        @Override
+    @Override
     public Store create(Store store) {
         return storeRepository.save(store);
     }
@@ -33,14 +33,14 @@ public class StoreServiceImpl implements StoreService {
         return storeRepository.findAll();
     }
 //
-//    @Override
-//    public Store update(Store store) {
-//        Store currentStoreId = getById(store.getId());
-//        if (currentStoreId != null){
-//            return storeRepository.save(store);
-//        }
-//        return null;
-//    }
+    @Override
+    public Store updateE(Store store) {
+        Store currentStoreId = getById(store.getId());
+        if (currentStoreId != null){
+            return storeRepository.save(store);
+        }
+        return null;
+    }
 //
 //    @Override
 //    public void delete(String id) {
@@ -68,41 +68,37 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public StoreResponse update(StoreRequest storeRequest) {
-//        StoreResponse getStore = getById(storeRequest.getId());
-
-        if (storeRequest.getAddress() != null){
-            Store updateStore = storeRepository.findById(storeRequest.getId()).orElse(null);
-
-            if (updateStore != null){
-                updateStore.setName(storeRequest.getName());
-                updateStore.setNoSiup(storeRequest.getNoSiup());
-                updateStore.setAddress(storeRequest.getAddress());
-                updateStore.setMobilePhone(storeRequest.getMobilePhone());
-                storeRepository.save(updateStore);
-
-                return StoreResponse.builder()
-                        .noSiup(updateStore.getNoSiup())
-                        .storeName(updateStore.getName())
-                        .build();
-            }else {
-                return null;
-            }
-        }else {
-            return null;
+        Store currentStoreId = storeRepository.findById(storeRequest.getId()).orElse(null);
+        if (currentStoreId != null){
+            Store store = Store.builder()
+                    .id(storeRequest.getId())
+                    .name(storeRequest.getName())
+                    .noSiup(storeRequest.getNoSiup())
+                    .address(storeRequest.getAddress())
+                    .mobilePhone(storeRequest.getMobilePhone())
+                    .build();
+            storeRepository.save(store);
+            return StoreResponse.builder()
+                    .id(store.getId())
+                    .storeName(store.getName())
+                    .noSiup(store.getNoSiup())
+                    .build();
         }
+        return null;
     }
 
-//    @Override
-//    public StoreResponse getById(String id) {
-//        // Mengambil data dari repository menggunakan ID
-//        Store stores = storeRepository.findById(id).orElseThrow(()-> new RuntimeException("ID not found"));
-//        // Mengonversi objek Store menjadi objek StoreResponse
-//        return StoreResponse.builder()
-//                .id(stores.getId())
-//                .storeName(stores.getName())
-//                .noSiup(stores.getNoSiup())
-//                .build();
-//    }
+    @Override
+    public StoreResponse getByIdE(String id) {
+        // Mengambil data dari repository menggunakan ID
+        Store stores = storeRepository.findById(id).orElse(null);
+        assert stores != null;
+        // Mengonversi objek Store menjadi objek StoreResponse
+        return StoreResponse.builder()
+                .id(stores.getId())
+                .storeName(stores.getName())
+                .noSiup(stores.getNoSiup())
+                .build();
+    }
 
     @Override
     public List<StoreResponse> getAll() {

@@ -22,5 +22,5 @@ public class ProductRequest {
     @Min(value = 0, message = "stock must be greater than 0")
     private Integer stock;
     @NotBlank(message = "storeId is required")
-    private String storeId;
+    private StoreResponse storeId;
 }

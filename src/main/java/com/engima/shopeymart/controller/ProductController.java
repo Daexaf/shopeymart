@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/v1")
+    @PreAuthorize("hasRole('ADMIN')") //untuk assign tugas ke role tersebut, selain role tersebut ga bisa akses
     public ResponseEntity<?> createProduct(@RequestBody ProductRequest productRequest){
         ProductResponse productResponse = productService.createProductAndProductPrice(productRequest);
         return ResponseEntity.status(HttpStatus.CREATED)

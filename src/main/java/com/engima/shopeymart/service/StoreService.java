@@ -11,12 +11,12 @@ public interface StoreService {
     Store create(Store store);
     Store getById(String id);
     List<Store> getAllE();
-//    Store update(Store store);
+    Store updateE(Store store);
 //    void delete(String id);
 
     StoreResponse create(StoreRequest storeRequest);
 
-//    StoreResponse getById(String id);
+    StoreResponse getByIdE(String id);
 
     List<StoreResponse> getAll();
 

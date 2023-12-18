@@ -109,7 +109,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse createProductAndProductPrice(ProductRequest productRequest) {
 
-        Store store = storeService.getById(productRequest.getStoreId());
+        StoreResponse storeResponse = storeService.getByIdE(productRequest.getStoreId().getId());
 
         Product product = Product.builder()
                 .name(productRequest.getProductName())
@@ -123,7 +123,7 @@ public class ProductServiceImpl implements ProductService {
                 .isActive(true)
                 .product(product)
                 .store(Store.builder()
-                        .id(store.getId())
+                        .id(storeResponse.getId())
                         .build())
                 .build();
         productPriceService.create(productPrice);
@@ -134,9 +134,9 @@ public class ProductServiceImpl implements ProductService {
                 .price(productPrice.getPrice())
                 .stock(productPrice.getStock())
                 .store(StoreResponse.builder()
-                        .id(store.getId())
-                        .storeName(store.getName())
-                        .noSiup(store.getNoSiup())
+                        .id(storeResponse.getId())
+                        .storeName(storeResponse.getStoreName())
+                        .noSiup(storeResponse.getNoSiup())
                         .build())
                 .build();
     }

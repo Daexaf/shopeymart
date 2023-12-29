@@ -2,7 +2,6 @@ package com.engima.shopeymart.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
 @Table(name = "m_user_credential")

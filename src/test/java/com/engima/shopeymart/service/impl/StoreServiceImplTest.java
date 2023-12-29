@@ -5,8 +5,10 @@ import com.engima.shopeymart.dto.response.StoreResponse;
 import com.engima.shopeymart.entity.Store;
 import com.engima.shopeymart.repository.StoreRepository;
 import com.engima.shopeymart.service.StoreService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -25,6 +27,13 @@ class StoreServiceImplTest {
 
     //create StoreService Instance
     private final StoreService storeService = new StoreServiceImpl(storeRepository);
+
+//    @BeforeEach
+//    public void setUp(){
+//        MockitoAnnotations.initMocks(this);
+//        storeService = new StoreServiceImpl(storeRepository);
+//    }
+
     @Test
     void itShouldReturnStoreWhenCreateNewStore() {
         Store dummyStore = new Store();
@@ -32,13 +41,6 @@ class StoreServiceImplTest {
         dummyStore.setName("toko dummy");
 
         //ini kalo pake req, res
-
-        // @BeforeEach
-        // public void setUp(){
-        // MockitoAnnotations.initMocks(this);
-        // storeService = new StoreServiceImpl(storeRepository);
-        //}
-
 //        StoreRequest dummyStoreRequest = new StoreRequest();
 //        dummyStoreRequest.setId("123");
 //        dummyStoreRequest.setName("toko dummy");

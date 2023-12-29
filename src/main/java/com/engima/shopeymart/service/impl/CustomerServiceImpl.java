@@ -2,6 +2,7 @@ package com.engima.shopeymart.service.impl;
 
 import com.engima.shopeymart.dto.request.CustomerRequest;
 import com.engima.shopeymart.dto.response.CustomerResponse;
+import com.engima.shopeymart.dto.response.StoreResponse;
 import com.engima.shopeymart.entity.Customer;
 import com.engima.shopeymart.entity.Store;
 import com.engima.shopeymart.repository.CustomerRepository;
@@ -35,24 +36,25 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerResponse update(CustomerRequest customerRequest) {
-        CustomerResponse getCustomer = getById(customerRequest.getId());
-
-        if (getCustomer != null){
-            Customer updateCustomer = customerRepository.findById(customerRequest.getId()).orElse(null);
-            if (updateCustomer != null){
-                updateCustomer.setName(customerRequest.getName());
-                updateCustomer.setAddress(customerRequest.getAddress());
-                updateCustomer.setEmail(customerRequest.getEmail());
-                updateCustomer.setMobilePhone(customerRequest.getMobilePhone());
-                customerRepository.save(updateCustomer);
-
-                return getCustomerResponse(updateCustomer);
-            }else {
-                return null;
-            }
-        }else {
-            return null;
+//        CustomerResponse getCustomer = getById(customerRequest.getId());
+        Customer currentCustomerId = customerRepository.findById(customerRequest.getId()).orElse(null);
+        if (currentCustomerId != null){
+            Customer customer = Customer.builder()
+                    .id(customerRequest.getId())
+                    .name(customerRequest.getName())
+                    .email(customerRequest.getEmail())
+                    .address(customerRequest.getAddress())
+                    .mobilePhone(customerRequest.getMobilePhone())
+                    .build();
+            customerRepository.save(customer);
+            return CustomerResponse.builder()
+                    .id(customer.getId())
+                    .fullName(customer.getName())
+                    .phone(customer.getMobilePhone())
+                    .address(customer.getAddress())
+                    .build();
         }
+            return null;
     }
 
     @Override
@@ -79,15 +81,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse getById(String id) {
         Customer customer = customerRepository.findById(id).orElse(null);
-        if (customer != null) {
+        assert customer != null;
             return CustomerResponse.builder()
                     .id(customer.getId())
                     .fullName(customer.getName())
                     .address(customer.getAddress())
                     .phone(customer.getMobilePhone())
                     .build();
-        }
-        return null;
+
     }
 //    public CustomerResponse getById(String id) {
 //        Customer customers = customerRepository.findById(id).orElseThrow(()-> new RuntimeException("ID not found"));

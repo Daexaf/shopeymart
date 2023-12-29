@@ -24,6 +24,9 @@ public class Customer {
     @OneToOne
     @JoinColumn(name = "user_credential_id")
     private UserCredential userCredential;
+
+    public Customer(String id, String name, String mail, String address, String email) {
+    }
     //id
     //name
     //address
